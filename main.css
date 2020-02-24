@@ -1,1 +1,9 @@
-Code
+h1 {
+  text-align: center;
+}
+
+button,
+select {
+  display: block;
+  margin: auto;
+}
