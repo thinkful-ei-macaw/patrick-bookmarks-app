@@ -1,9 +1,43 @@
-h1 {
+h1,
+ul,
+li {
   text-align: center;
+  list-style-position: inside;
+  list-style-type: none;
+}
+
+ul,
+li {
+  padding: 0;
 }
 
 button,
 select {
   display: block;
   margin: auto;
+}
+
+.collapsible {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active,
+.collapsible:hover {
+  background-color: #ccc;
+}
+
+.hidden {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  display: none;
 }
