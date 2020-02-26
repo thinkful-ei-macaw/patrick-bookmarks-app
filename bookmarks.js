@@ -2,6 +2,7 @@
 /* eslint-disable quotes */
 
 import store from "./store.js";
+import api from "./api.js";
 
 //HTML FUNCTIONS//
 
@@ -10,11 +11,11 @@ function generateMainBookmarkElement() {
      <button class="newBookmark" type="submit">New Bookmark +</button>
      <select>
          <option disabled selected>Filter By Rating</option>
-         <option>1 Star</option>
-         <option>2 Stars</option>
-         <option>3 Stars</option>
-         <option>4 Stars</option>
-         <option>5 Stars</option>
+         <option>&#9733;</option>
+         <option>&#9733;&#9733;</option>
+         <option>&#9733;&#9733;&#9733;</option>
+         <option>&#9733;&#9733;&#9733;&#9733;</option>
+         <option>&#9733;&#9733;&#9733;&#9733;&#9733;</option>
      </select>
      <ul>
      </ul>`;
@@ -22,34 +23,45 @@ function generateMainBookmarkElement() {
 
 function generateAddBookmarkElement() {
   return `
+  <div class="form">
      <form id="addnew">
-         <label for="addnew">Add New Bookmark</label>
-         <input type="text" id="addnew" name="addnew">
-         <select class="ratings-selector">
-            <option>1 Star</option>
+         <label for="addnew">Add New Bookmark</label><br>
+         <input type="text" id="url" name="url" placeholder="https://www.google.com/" required><br>
+           <input type="text" placeholder="Title" name="title" required><br>
+         <input type="text" id="description" placeholder="Description (optional)" name="desc"><br>
+             <select class="ratings-selector" name="rating">
+            <option disabled selected>Rate Your Bookmark</option>
+            <option value="1">&#9733;</option>
+            <option value="2">&#9733;&#9733;</option>
+            <option value="3">&#9733;&#9733;&#9733;</option>
+            <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+            <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
          </select>
-         <input type="text" id="description" value="description">
-         <input type="submit" value="create">
-         <input type="submit" value="cancel">
-     </form>`;
+         <input class="createBookmark" type="submit" value="create">
+         <input type="button" class="cancel" value="cancel">
+     </form>
+     </div>`;
 }
 
 function generateBookmarkListing(listing) {
   return `
      <button type="button" class="collapsible">${listing.title}, ${listing.rating}</button>
       <div class="hidden">
-        <a href="${listing.url}">Link</a>
+        <a href="${listing.url}">Visit Site</a><br>
+        ${listing.desc}
+        <button type="button" class="delete-button">Delete</button>
       </div>
     </li>`;
 }
 
-console.log(store.store.bookmarks);
+console.log(store.bookmarks);
 
 //EVENT LISTENERS//
 
 function addBookmarkButton() {
   $("main").on("click", ".newBookmark", event => {
     event.preventDefault();
+    console.log("New bookmark button clicked");
     store.adding = true;
     renderAddBookmarkPage();
   });
@@ -62,9 +74,40 @@ function openCollapsible() {
   });
 }
 
-function createBookmarkButton() {}
+function createBookmarkButton() {
+  $("main").on("submit", "#addnew", event => {
+    event.preventDefault();
+    let formElement = $("#addnew")[0];
+    let bookmarkInfo = serializeJson(formElement);
+    console.log(bookmarkInfo);
+    api.createBookmark(bookmarkInfo).then(newBookmark => {
+      store.addBookmark(newBookmark);
+      render();
+    });
+  });
+}
 
-function cancelButton() {}
+function cancelButton() {
+  $("main").on("click", ".cancel", event => {
+    event.preventDefault();
+    console.log("Cancelled new bookmark");
+    render();
+  });
+}
+
+function deleteBookmark() {
+  $("main").on("click", ".delete-button", event => {
+    event.preventDefault();
+    console.log("Deletion of bookmark successful");
+  });
+}
+
+function serializeJson(form) {
+  const formData = new FormData(form);
+  const o = {};
+  formData.forEach((val, name) => (o[name] = val));
+  return JSON.stringify(o);
+}
 
 //RENDER FUNCTIONS
 
@@ -77,7 +120,7 @@ function renderAddBookmarkPage() {
 }
 
 function renderList() {
-  store.store.bookmarks.forEach(element => {
+  store.bookmarks.forEach(element => {
     $("ul").append(generateBookmarkListing(element));
   });
 }
@@ -92,6 +135,9 @@ function render() {
 function eventListenerBinder() {
   addBookmarkButton();
   openCollapsible();
+  createBookmarkButton();
+  cancelButton();
+  deleteBookmark();
 }
 
 export default {

@@ -41,3 +41,9 @@ select {
   background-color: #f1f1f1;
   display: none;
 }
+
+.form {
+  text-align: center;
+  margin: auto;
+  width: auto;
+}
