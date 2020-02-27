@@ -12,9 +12,11 @@ li {
 }
 
 button,
-select {
+select,
+label {
   display: block;
   margin: auto;
+  text-align: center;
 }
 
 .newBookmark {

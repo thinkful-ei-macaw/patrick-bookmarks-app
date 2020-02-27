@@ -1,5 +1,7 @@
 let bookmarks = [];
 let error = null;
+let filter = [];
+let filtered = false;
 
 const addBookmark = function(bookmark) {
   this.bookmarks.push(bookmark);
@@ -24,5 +26,7 @@ export default {
   findById,
   deleteBookmark,
   setError,
-  error
+  error,
+  filter,
+  filtered
 };

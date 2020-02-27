@@ -9,13 +9,14 @@ import api from "./api.js";
 function generateMainBookmarkElement() {
   return `
      <button class="newBookmark" type="submit">New Bookmark +</button>
-     <select>
-         <option disabled selected>Filter By Rating</option>
-         <option>&#9733;</option>
-         <option>&#9733;&#9733;</option>
-         <option>&#9733;&#9733;&#9733;</option>
-         <option>&#9733;&#9733;&#9733;&#9733;</option>
-         <option>&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+     <label for="filter">Filter By Rating:</label>
+     <select id="ratingFilter" name="Filter By Rating">
+         <option value="all">Unfiltered</option>
+         <option value="1">&#9733;</option>
+         <option value="2">&#9733;&#9733;</option>
+         <option value="3">&#9733;&#9733;&#9733;</option>
+         <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+         <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
      </select>
      <ul>
      </ul>`;
@@ -44,11 +45,11 @@ function generateAddBookmarkElement() {
 }
 
 function generateBookmarkListing(listing) {
-  let stars = "No Rating";
+  let stars = "Unrated";
   if (listing.rating === 1) {
     stars = "&#9733;";
   } else if (listing.rating === 2) {
-    stars = "&#9733;;&#9733;";
+    stars = "&#9733;&#9733;";
   } else if (listing.rating === 3) {
     stars = "&#9733;&#9733;&#9733;";
   } else if (listing.rating === 4) {
@@ -139,6 +140,28 @@ function deleteBookmark() {
   });
 }
 
+function filterBookmarks() {
+  $("main").on("change", "#ratingFilter", function(event) {
+    let ratingNum = $(event.target).val();
+    if (ratingNum === "all") {
+      store.filtered = false;
+      store.filter = [];
+    } else {
+      store.filtered = true;
+      store.filter = [];
+    }
+    console.log(parseInt(ratingNum));
+    let filtered = store.filter;
+    for (let i = 0; i < store.bookmarks.length; i++) {
+      if (store.bookmarks[i].rating === parseInt(ratingNum)) {
+        filtered.push(store.bookmarks[i]);
+      }
+    }
+    console.log(store.filter);
+    render();
+  });
+}
+
 function serializeJson(form) {
   const formData = new FormData(form);
   const o = {};
@@ -181,9 +204,15 @@ function renderAddBookmarkPage() {
 }
 
 function renderList() {
-  store.bookmarks.forEach(element => {
-    $("ul").append(generateBookmarkListing(element));
-  });
+  if (store.filtered === false) {
+    store.bookmarks.forEach(element => {
+      $("ul").append(generateBookmarkListing(element));
+    });
+  } else {
+    store.filter.forEach(element => {
+      $("ul").append(generateBookmarkListing(element));
+    });
+  }
 }
 
 function renderError() {
@@ -210,6 +239,7 @@ function eventListenerBinder() {
   cancelButton();
   deleteBookmark();
   handleCloseError();
+  filterBookmarks();
 }
 
 export default {
