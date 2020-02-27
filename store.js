@@ -1,5 +1,5 @@
 let bookmarks = [];
-let adding = false;
+let error = null;
 
 const addBookmark = function(bookmark) {
   this.bookmarks.push(bookmark);
@@ -14,10 +14,15 @@ const deleteBookmark = function(id) {
   this.bookmarks.splice(this.bookmarks.indexOf(deletion), 1);
 };
 
+const setError = function(error) {
+  this.error = error;
+};
+
 export default {
   bookmarks,
   addBookmark,
-  adding,
   findById,
-  deleteBookmark
+  deleteBookmark,
+  setError,
+  error
 };

@@ -26,9 +26,9 @@ function generateAddBookmarkElement() {
   <div class="form">
      <form id="addnew">
          <label for="addnew">Add New Bookmark</label><br>
-         <input type="text" id="url" name="url" placeholder="https://www.google.com/" required><br>
-           <input type="text" placeholder="Title" name="title" required><br>
-         <input type="text" id="description" placeholder="Description (optional)" name="desc"><br>
+         <input type="text" id="url" name="url" placeholder="https://www.google.com/" required autocomplete="off"><br>
+           <input type="text" placeholder="Title" name="title" required autocomplete="off"><br>
+         <input type="text" id="description" placeholder="Description (optional)" name="desc"  autocomplete="off"><br>
              <select class="ratings-selector" name="rating">
             <option disabled selected>Rate Your Bookmark</option>
             <option value="1">&#9733;</option>
@@ -58,10 +58,10 @@ function generateBookmarkListing(listing) {
   }
   return `
     <li class="listing" data-id="${listing.id}">
-     <button type="button" class="collapsible ${listing.id}">${listing.title}, ${stars}</button>
+     <button type="button" class="collapsible" id="${listing.id}">${listing.title}, ${stars}</button>
       <div class="hidden">
         <a href="${listing.url}">Visit Site</a><br>
-        <p>${listing.desc}
+        <p>${listing.desc}</p>
         <button type="button" class="delete-button">Delete</button>
       </div>
     </li>`;
@@ -80,10 +80,14 @@ function addBookmarkButton() {
 
 function openCollapsible() {
   $("main").on("click", ".collapsible", event => {
-    event.preventDefault();
     const menu = event.currentTarget;
+
     console.log(menu);
-    $(".hidden").toggle(menu);
+
+    $(event.currentTarget)
+      .closest("li")
+      .find("div")
+      .toggle(".hidden");
   });
 }
 
@@ -93,10 +97,17 @@ function createBookmarkButton() {
     let formElement = $("#addnew")[0];
     let bookmarkInfo = serializeJson(formElement);
     console.log(bookmarkInfo);
-    api.createBookmark(bookmarkInfo).then(newBookmark => {
-      store.addBookmark(newBookmark);
-      render();
-    });
+    api
+      .createBookmark(bookmarkInfo)
+      .then(newBookmark => {
+        store.addBookmark(newBookmark);
+        render();
+      })
+      .catch(error => {
+        console.error(error);
+        store.setError(error.message);
+        renderError();
+      });
   });
 }
 
@@ -114,10 +125,17 @@ function deleteBookmark() {
     console.log("Deletion of bookmark successful");
     const id = getBookmarkId(event.currentTarget);
     console.log(id);
-    api.deleteBookmark(id).then(function() {
-      store.deleteBookmark(id);
-      render();
-    });
+    api
+      .deleteBookmark(id)
+      .then(function() {
+        store.deleteBookmark(id);
+        render();
+      })
+      .catch(error => {
+        console.error(error);
+        store.setError(error.message);
+        renderError();
+      });
   });
 }
 
@@ -131,8 +149,25 @@ function serializeJson(form) {
 function getBookmarkId(bookmark) {
   console.log(bookmark);
   return $(bookmark)
-    .closest(".listings")
+    .closest(".listing")
     .data("id");
+}
+
+//ERROR FUNCTIONS
+
+function generateError(message) {
+  return `
+    <section class="error-content">
+        <button id="cancel-error">X</button>
+        <p>${message}</p>
+    </section>`;
+}
+
+function handleCloseError() {
+  $("main").on("click", "#cancel-error", () => {
+    store.setError(null);
+    renderError();
+  });
 }
 
 //RENDER FUNCTIONS
@@ -151,9 +186,19 @@ function renderList() {
   });
 }
 
+function renderError() {
+  if (store.error) {
+    const el = generateError(store.error);
+    $("main").append(el);
+  } else {
+    $(".error-text").remove();
+  }
+}
+
 function render() {
   renderMainPage();
   renderList();
+  renderError();
 }
 
 //APP HANDLERS//
@@ -164,6 +209,7 @@ function eventListenerBinder() {
   createBookmarkButton();
   cancelButton();
   deleteBookmark();
+  handleCloseError();
 }
 
 export default {
