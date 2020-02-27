@@ -26,8 +26,8 @@ function generateAddBookmarkElement() {
   <div class="form">
      <form id="addnew">
          <label for="addnew">Add New Bookmark</label><br>
-         <input type="text" id="url" name="url" placeholder="https://www.google.com/" required autocomplete="off"><br>
-           <input type="text" placeholder="Title" name="title" required autocomplete="off"><br>
+         <input type="text" id="url" name="url" placeholder="https://www.google.com/" autocomplete="off"><br>
+           <input type="text" placeholder="Title" name="title" autocomplete="off"><br>
          <input type="text" id="description" placeholder="Description (optional)" name="desc"  autocomplete="off"><br>
              <select class="ratings-selector" name="rating">
             <option disabled selected>Rate Your Bookmark</option>
@@ -191,7 +191,7 @@ function renderError() {
     const el = generateError(store.error);
     $("main").append(el);
   } else {
-    $(".error-text").remove();
+    $(".error-content").remove();
   }
 }
 
