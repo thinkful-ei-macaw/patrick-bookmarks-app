@@ -11,6 +11,7 @@ function generateMainBookmarkElement() {
      <button class="newBookmark" type="submit">New Bookmark +</button>
      <label for="filter">Filter By Rating:</label>
      <select id="ratingFilter" name="Filter By Rating">
+         <option disabled selected>Select from list</option>
          <option value="all">Unfiltered</option>
          <option value="1">&#9733;</option>
          <option value="2">&#9733;&#9733;</option>
@@ -30,8 +31,8 @@ function generateAddBookmarkElement() {
          <input type="text" id="url" name="url" placeholder="https://www.google.com/" autocomplete="off"><br>
            <input type="text" placeholder="Title" name="title" autocomplete="off"><br>
          <input type="text" id="description" placeholder="Description (optional)" name="desc"  autocomplete="off"><br>
-             <select class="ratings-selector" name="rating">
-            <option disabled selected>Rate Your Bookmark</option>
+             <select class="ratings-selector" name="rating" required>
+            <option disabled>Rate Your Bookmark</option>
             <option value="1">&#9733;</option>
             <option value="2">&#9733;&#9733;</option>
             <option value="3">&#9733;&#9733;&#9733;</option>
@@ -61,7 +62,7 @@ function generateBookmarkListing(listing) {
     <li class="listing" data-id="${listing.id}">
      <button type="button" class="collapsible" id="${listing.id}">${listing.title}, ${stars}</button>
       <div class="hidden">
-        <a href="${listing.url}">Visit Site</a><br>
+        <a href="${listing.url}" class="link">Visit Site</a><br>
         <p>${listing.desc}</p>
         <button type="button" class="delete-button">Delete</button>
       </div>
@@ -143,6 +144,7 @@ function deleteBookmark() {
 function filterBookmarks() {
   $("main").on("change", "#ratingFilter", function(event) {
     let ratingNum = $(event.target).val();
+    console.log(ratingNum);
     if (ratingNum === "all") {
       store.filtered = false;
       store.filter = [];
@@ -181,8 +183,8 @@ function getBookmarkId(bookmark) {
 function generateError(message) {
   return `
     <section class="error-content">
-        <button id="cancel-error">X</button>
         <p>${message}</p>
+        <button id="cancel-error">Dismiss</button>
     </section>`;
 }
 
@@ -218,7 +220,7 @@ function renderList() {
 function renderError() {
   if (store.error) {
     const el = generateError(store.error);
-    $("main").append(el);
+    $("main").prepend(el);
   } else {
     $(".error-content").remove();
   }

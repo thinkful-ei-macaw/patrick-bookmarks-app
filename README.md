@@ -24,5 +24,3 @@
 - I receive appropriate feedback when I cannot submit a bookmark
 
 - I can select from a dropdown a "minimum rating" to filter the list by all bookmarks rated at or above the chosen selection
-
-- I can edit the rating and description of a bookmark in my list

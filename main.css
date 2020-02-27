@@ -1,9 +1,14 @@
+body {
+  background-image: url("https://webgradients.com/public/webgradients_png/002%20Night%20Fade.png");
+}
+
 h1,
 ul,
 li {
   text-align: center;
   list-style-position: inside;
   list-style-type: none;
+  font-family: "Vast Shadow";
 }
 
 ul,
@@ -17,9 +22,19 @@ label {
   display: block;
   margin: auto;
   text-align: center;
+  font-family: "Vast Shadow";
 }
 
-.newBookmark {
+.error-content {
+  border: 5px solid red;
+  background-color: rgb(255, 136, 136);
+  text-align: center;
+}
+
+.newBookmark,
+select,
+input,
+#cancel-error {
   background-color: #eee;
   color: #444;
   cursor: pointer;
@@ -30,6 +45,19 @@ label {
   outline: none;
   font-size: 15px;
   margin-bottom: 20px;
+  text-align: center;
+}
+
+.link {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  width: 75%;
+  border: none;
+  text-align: center;
+  outline: none;
+  font-size: 15px;
+  text-align: center;
 }
 
 .collapsible {
@@ -53,7 +81,7 @@ label {
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: #f1f1f1;
+  background-color: #acacac;
   display: none;
 }
 
@@ -61,4 +89,19 @@ label {
   text-align: center;
   margin: auto;
   width: auto;
+}
+
+@media (min-width: 1080px) {
+  .collapsible,
+  .hidden,
+  input {
+    width: 50%;
+  }
+
+  .newBookmark,
+  select,
+  button,
+  #cancel-error {
+    width: 25%;
+  }
 }
