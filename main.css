@@ -101,6 +101,10 @@ input,
 }
 
 @media (min-width: 1080px) {
+  body {
+    background-color: pink;
+    background-image: none;
+  }
   .collapsible,
   input {
     width: 50%;
