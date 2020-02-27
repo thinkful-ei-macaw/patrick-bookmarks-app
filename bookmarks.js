@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable quotes */
-
 import store from "./store.js";
 import api from "./api.js";
 
@@ -8,41 +5,39 @@ import api from "./api.js";
 
 function generateMainBookmarkElement() {
   return `
-     <button class="newBookmark" type="submit">New Bookmark +</button>
-     <label for="filter">Filter By Rating:</label>
-     <select id="ratingFilter" name="Filter By Rating">
-         <option disabled selected>Select from list</option>
-         <option value="all">Unfiltered</option>
-         <option value="1">&#9733;</option>
-         <option value="2">&#9733;&#9733;</option>
-         <option value="3">&#9733;&#9733;&#9733;</option>
-         <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
-         <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
-     </select>
-     <ul>
-     </ul>`;
+   <button class="newBookmark" type="submit">New Bookmark +</button>
+   <label for="filter">Filter By Rating:</label>
+   <select id="ratingFilter" name="Filter By Rating" aria-label="filter-by-rating">
+     <option disabled selected>Select from list</option>
+     <option value="all">Unfiltered</option>
+     <option value="1">&#9733;</option>
+     <option value="2">&#9733;&#9733;</option>
+     <option value="3">&#9733;&#9733;&#9733;</option>
+     <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+     <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+    </select>
+    <ul>
+    </ul>`;
 }
 
 function generateAddBookmarkElement() {
   return `
-  <div class="form">
-     <form id="addnew">
-         <label for="addnew">Add New Bookmark</label><br>
-         <input type="text" id="url" name="url" placeholder="https://www.google.com/" autocomplete="off"><br>
-           <input type="text" placeholder="Title" name="title" autocomplete="off"><br>
-         <input type="text" id="description" placeholder="Description (optional)" name="desc"  autocomplete="off"><br>
-             <select class="ratings-selector" name="rating" required>
-            <option disabled>Rate Your Bookmark</option>
-            <option value="1">&#9733;</option>
-            <option value="2">&#9733;&#9733;</option>
-            <option value="3">&#9733;&#9733;&#9733;</option>
-            <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
-            <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
-         </select>
-         <input class="createBookmark" type="submit" value="create">
-         <input type="button" class="cancel" value="cancel">
-     </form>
-     </div>`;
+    <form id="addnew" class="form">
+      <label for="addnew">Add New Bookmark</label><br>
+      <input type="text" id="url" name="url" placeholder="https://www.google.com/" autocomplete="off"><br>
+      <input type="text" placeholder="Title" name="title" autocomplete="off"><br>
+      <input type="text" id="description" placeholder="Description (optional)" name="desc"  autocomplete="off"><br>
+      <select class="ratings-selector" name="rating" required>
+        <option disabled selected>Select Rating</option>
+        <option value="1">&#9733;</option>
+        <option value="2">&#9733;&#9733;</option>
+        <option value="3">&#9733;&#9733;&#9733;</option>
+        <option value="4">&#9733;&#9733;&#9733;&#9733;</option>
+        <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+      </select>
+      <input class="createBookmark" type="submit" value="create">
+      <input type="button" class="cancel" value="cancel">
+    </form>`;
 }
 
 function generateBookmarkListing(listing) {
@@ -61,7 +56,7 @@ function generateBookmarkListing(listing) {
   return `
     <li class="listing" data-id="${listing.id}">
      <button type="button" class="collapsible" id="${listing.id}">${listing.title}, ${stars}</button>
-      <div class="hidden">
+      <div class="hidden"><br>
         <a href="${listing.url}" class="link">Visit Site</a><br>
         <p>${listing.desc}</p>
         <button type="button" class="delete-button">Delete</button>
@@ -74,18 +69,12 @@ function generateBookmarkListing(listing) {
 function addBookmarkButton() {
   $("main").on("click", ".newBookmark", event => {
     event.preventDefault();
-    console.log("New bookmark button clicked");
-    store.adding = true;
     renderAddBookmarkPage();
   });
 }
 
 function openCollapsible() {
   $("main").on("click", ".collapsible", event => {
-    const menu = event.currentTarget;
-
-    console.log(menu);
-
     $(event.currentTarget)
       .closest("li")
       .find("div")
@@ -98,7 +87,6 @@ function createBookmarkButton() {
     event.preventDefault();
     let formElement = $("#addnew")[0];
     let bookmarkInfo = serializeJson(formElement);
-    console.log(bookmarkInfo);
     api
       .createBookmark(bookmarkInfo)
       .then(newBookmark => {
@@ -116,7 +104,6 @@ function createBookmarkButton() {
 function cancelButton() {
   $("main").on("click", ".cancel", event => {
     event.preventDefault();
-    console.log("Cancelled new bookmark");
     render();
   });
 }
@@ -126,7 +113,6 @@ function deleteBookmark() {
     event.preventDefault();
     console.log("Deletion of bookmark successful");
     const id = getBookmarkId(event.currentTarget);
-    console.log(id);
     api
       .deleteBookmark(id)
       .then(function() {
@@ -144,7 +130,6 @@ function deleteBookmark() {
 function filterBookmarks() {
   $("main").on("change", "#ratingFilter", function(event) {
     let ratingNum = $(event.target).val();
-    console.log(ratingNum);
     if (ratingNum === "all") {
       store.filtered = false;
       store.filter = [];
@@ -152,14 +137,12 @@ function filterBookmarks() {
       store.filtered = true;
       store.filter = [];
     }
-    console.log(parseInt(ratingNum));
     let filtered = store.filter;
     for (let i = 0; i < store.bookmarks.length; i++) {
       if (store.bookmarks[i].rating === parseInt(ratingNum)) {
         filtered.push(store.bookmarks[i]);
       }
     }
-    console.log(store.filter);
     render();
   });
 }
@@ -172,7 +155,6 @@ function serializeJson(form) {
 }
 
 function getBookmarkId(bookmark) {
-  console.log(bookmark);
   return $(bookmark)
     .closest(".listing")
     .data("id");

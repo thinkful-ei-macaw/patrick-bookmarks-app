@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 import bookmarks from "./bookmarks.js";
 import api from "./api.js";
 import store from "./store.js";

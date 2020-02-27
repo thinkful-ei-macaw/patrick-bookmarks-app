@@ -22,9 +22,7 @@ const listApiFetch = function(...args) {
     });
 };
 
-console.log(listApiFetch(`${BASE_URL}/bookmarks`));
-
-//dont use arrow functions in base level functions in modules
+//dont use arrow functions for base level functions in modules
 
 function getBookmarks() {
   return listApiFetch(`${BASE_URL}/bookmarks`);

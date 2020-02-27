@@ -1,5 +1,5 @@
 body {
-  background-image: url("https://webgradients.com/public/webgradients_png/002%20Night%20Fade.png");
+  background-image: url("https://previews.123rf.com/images/1stchoice/1stchoice1710/1stchoice171000021/87596933-pink-background-with-soft-glossy-pastel-texture.jpg");
 }
 
 h1,
@@ -31,6 +31,13 @@ label {
   text-align: center;
 }
 
+.createBookmark, .cancel, .newBookmark {
+  font-family: "Vast Shadow";
+  font-weight: 400;
+  font-size: 24px;
+  border: 8px dotted rgb(243, 155, 162);
+}
+
 .newBookmark,
 select,
 input,
@@ -49,11 +56,13 @@ input,
 }
 
 .link {
-  background-color: #eee;
+  background-color: rgb(255, 210, 217);
   color: #444;
   cursor: pointer;
+  padding: 10px;
+  margin-top: 30px;
   width: 75%;
-  border: none;
+  border: 5px dotted rgb(247, 152, 168);
   text-align: center;
   outline: none;
   font-size: 15px;
@@ -81,7 +90,7 @@ input,
   padding: 0 18px;
   display: none;
   overflow: hidden;
-  background-color: #acacac;
+  background-color: #e0e0e0;
   display: none;
 }
 
@@ -93,7 +102,6 @@ input,
 
 @media (min-width: 1080px) {
   .collapsible,
-  .hidden,
   input {
     width: 50%;
   }
@@ -104,4 +112,19 @@ input,
   #cancel-error {
     width: 25%;
   }
-}
+
+@media (min-width: 760px) {
+  .collapsible,
+  .hidden,
+  input {
+    width: 80%;
+  }
+
+  .newBookmark,
+  select,
+  button,
+  #cancel-error {
+    width: 55%;
+  }
+
+})
