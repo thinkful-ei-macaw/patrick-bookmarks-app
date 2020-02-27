@@ -28,7 +28,7 @@ function generateAddBookmarkElement() {
       <input type="text" placeholder="Title" name="title" autocomplete="off"><br>
       <input type="text" id="description" placeholder="Description (optional)" name="desc"  autocomplete="off"><br>
       <select class="ratings-selector" name="rating" required>
-        <option disabled selected>Select Rating</option>
+        <option disabled>Select Rating</option>
         <option value="1">&#9733;</option>
         <option value="2">&#9733;&#9733;</option>
         <option value="3">&#9733;&#9733;&#9733;</option>
