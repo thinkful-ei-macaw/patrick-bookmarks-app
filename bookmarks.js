@@ -44,19 +44,30 @@ function generateAddBookmarkElement() {
 }
 
 function generateBookmarkListing(listing) {
+  let stars = "No Rating";
+  if (listing.rating === 1) {
+    stars = "&#9733;";
+  } else if (listing.rating === 2) {
+    stars = "&#9733;;&#9733;";
+  } else if (listing.rating === 3) {
+    stars = "&#9733;&#9733;&#9733;";
+  } else if (listing.rating === 4) {
+    stars = "&#9733;&#9733;&#9733;&#9733;";
+  } else if (listing.rating === 5) {
+    stars = "&#9733;&#9733;&#9733;&#9733;&#9733;";
+  }
   return `
-     <button type="button" class="collapsible">${listing.title}, ${listing.rating}</button>
+    <li class="listing" data-id="${listing.id}">
+     <button type="button" class="collapsible ${listing.id}">${listing.title}, ${stars}</button>
       <div class="hidden">
         <a href="${listing.url}">Visit Site</a><br>
-        ${listing.desc}
+        <p>${listing.desc}
         <button type="button" class="delete-button">Delete</button>
       </div>
     </li>`;
 }
 
-console.log(store.bookmarks);
-
-//EVENT LISTENERS//
+//EVENT LISTENERS + ID FINDER//
 
 function addBookmarkButton() {
   $("main").on("click", ".newBookmark", event => {
@@ -70,7 +81,9 @@ function addBookmarkButton() {
 function openCollapsible() {
   $("main").on("click", ".collapsible", event => {
     event.preventDefault();
-    $(".hidden").toggle();
+    const menu = event.currentTarget;
+    console.log(menu);
+    $(".hidden").toggle(menu);
   });
 }
 
@@ -99,6 +112,12 @@ function deleteBookmark() {
   $("main").on("click", ".delete-button", event => {
     event.preventDefault();
     console.log("Deletion of bookmark successful");
+    const id = getBookmarkId(event.currentTarget);
+    console.log(id);
+    api.deleteBookmark(id).then(function() {
+      store.deleteBookmark(id);
+      render();
+    });
   });
 }
 
@@ -107,6 +126,13 @@ function serializeJson(form) {
   const o = {};
   formData.forEach((val, name) => (o[name] = val));
   return JSON.stringify(o);
+}
+
+function getBookmarkId(bookmark) {
+  console.log(bookmark);
+  return $(bookmark)
+    .closest(".listings")
+    .data("id");
 }
 
 //RENDER FUNCTIONS

@@ -22,11 +22,13 @@ const listApiFetch = function(...args) {
     });
 };
 
+console.log(listApiFetch(`${BASE_URL}/bookmarks`));
+
 //dont use arrow functions in base level functions in modules
 
-const getBookmarks = () => {
+function getBookmarks() {
   return listApiFetch(`${BASE_URL}/bookmarks`);
-};
+}
 
 function createBookmark(newBookmark) {
   return listApiFetch(`${BASE_URL}/bookmarks`, {
@@ -36,11 +38,11 @@ function createBookmark(newBookmark) {
   });
 }
 
-const deleteBookmark = id => {
+function deleteBookmark(id) {
   return listApiFetch(`${BASE_URL}/bookmarks/${id}`, {
     method: "DELETE"
   });
-};
+}
 
 export default {
   getBookmarks,
