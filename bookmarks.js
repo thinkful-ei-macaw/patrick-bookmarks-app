@@ -9,7 +9,6 @@ function generateMainBookmarkElement() {
    <label for="filter">Filter By Rating:</label>
    <select id="ratingFilter" name="Filter By Rating" aria-label="filter-by-rating">
      <option disabled selected>Select from list</option>
-     <option value="all">Unfiltered</option>
      <option value="1">&#9733;</option>
      <option value="2">&#9733;&#9733;</option>
      <option value="3">&#9733;&#9733;&#9733;</option>
@@ -139,7 +138,7 @@ function filterBookmarks() {
     }
     let filtered = store.filter;
     for (let i = 0; i < store.bookmarks.length; i++) {
-      if (store.bookmarks[i].rating === parseInt(ratingNum)) {
+      if (store.bookmarks[i].rating >= parseInt(ratingNum)) {
         filtered.push(store.bookmarks[i]);
       }
     }
